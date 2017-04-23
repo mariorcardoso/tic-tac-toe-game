@@ -45,7 +45,8 @@ class Game extends React.Component {
         squares: Array(9).fill(null)
       }],
       stepNumber: 0,
-      xIsNext: true
+      xIsNext: true,
+      movesDesc: false
     }
   }
   handleClick(i){
@@ -72,6 +73,12 @@ class Game extends React.Component {
     });
   }
 
+  changeOrderSort() {
+    this.setState({
+      movesDesc: !this.state.movesDesc
+    });
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -84,7 +91,7 @@ class Game extends React.Component {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
 
-    const moves = history.map((step, move) => {
+    let moves = history.map((step, move) => {
       const desc = move ? 'Move #' + move : 'Game start';
       return (
         <li key={move} className={step === current ? 'selected' : ''}>
@@ -92,6 +99,10 @@ class Game extends React.Component {
         </li>
       );
     });
+
+    if(this.state.movesDesc){
+      moves = moves.reverse();
+    }
 
     return (
       <div className="game">
@@ -103,6 +114,8 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <br></br>
+        <a href='#' onClick={() => this.changeOrderSort()}>Sort moves</a>
           <ol>{moves}</ol>
         </div>
       </div>
