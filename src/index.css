@@ -7,6 +7,14 @@ ol, ul {
   padding-left: 30px;
 }
 
+li.selected {
+  font-weight: bold;
+}
+
+li {
+  white-space: nowrap;
+}
+
 .board-row:after {
   clear: both;
   content: "";
