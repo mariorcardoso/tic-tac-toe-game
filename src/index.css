@@ -11,6 +11,11 @@ li.selected {
   font-weight: bold;
 }
 
+.square.winner {
+  font-size: 30px;
+  color: green;
+}
+
 li {
   white-space: nowrap;
 }
