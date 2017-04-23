@@ -11,7 +11,7 @@ function Square(props) {
 }
 
 class Board extends React.Component {
-  winner(i){
+  winnerSquare(i){
     if (this.props.winner) {
       return this.props.winner.includes(i);
     } else {
@@ -20,7 +20,7 @@ class Board extends React.Component {
   }
 
   renderSquare(i) {
-    return <Square key={i} winner={this.winner(i)} value={this.props.squares[i]} onClick={() => this.props.onClick(i)}/>;
+    return <Square key={i} winner={this.winnerSquare(i)} value={this.props.squares[i]} onClick={() => this.props.onClick(i)}/>;
   }
   renderRow(indexes, row_index) {
     const row = indexes.map((index) => {
@@ -61,7 +61,7 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
-    if(calculateWinner(squares) || squares[i]) {
+    if(calculateWinner(squares).symbol || squares[i]) {
       return;
     }
     squares[i] = this.state.xIsNext ? 'X' : 'O';
@@ -90,7 +90,8 @@ class Game extends React.Component {
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
-    const winner = calculateWinner(current.squares);
+    const winnerSquares = calculateWinner(current.squares).squares;
+    const winner = calculateWinner(current.squares).symbol;
 
     let status;
     if (winner) {
@@ -118,7 +119,7 @@ class Game extends React.Component {
           <Board
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
-            winner={winner}
+            winner={winnerSquares}
           />
         </div>
         <div className="game-info">
@@ -153,8 +154,8 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return lines[i];
+      return {squares: lines[i], symbol: squares[a]};
     }
   }
-  return null;
+  return {squares: null, symbol: null};
 }
